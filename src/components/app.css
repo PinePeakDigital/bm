@@ -69,7 +69,7 @@ body {
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
-  line-height: 1.4rem;
+  line-height: 0;
   padding: 0 1px 0 0;
   text-decoration: none;
   color: inherit;
@@ -77,10 +77,6 @@ body {
 
 .icon-button.spin {
   animation: spin 1s linear infinite;
-}
-
-.icon-button {
-  line-height: 0;
 }
 
 @keyframes spin {
