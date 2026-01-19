@@ -108,17 +108,18 @@ export default function Detail({
             </tr>
           </thead>
           <tbody>
-            {g.recent_data.map((point) =>
-              DatapointRow({
-                goal: g.slug,
-                point: {
+            {g.recent_data.map((point) => (
+              <DatapointRow
+                key={point.id}
+                goal={g.slug}
+                point={{
                   id: point.id,
                   daystamp: point.daystamp,
                   comment: point.comment,
                   value: point.value,
-                },
-              })
-            )}
+                }}
+              />
+            ))}
           </tbody>
         </table>
 

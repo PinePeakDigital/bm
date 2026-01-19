@@ -10,7 +10,7 @@ import { render } from "@testing-library/preact";
 // provider (react-query's hooks require the preact/compat React alias, which is
 // not wired up under vitest).
 const { datapointRowSpy } = vi.hoisted(() => ({
-  datapointRowSpy: vi.fn(() => null),
+  datapointRowSpy: vi.fn<[unknown], null>(() => null),
 }));
 
 vi.mock("./datapointRow", () => ({ default: datapointRowSpy }));
@@ -56,7 +56,9 @@ describe("Detail recent data", () => {
     render(<Detail g={makeGoal(DATAPOINT_ID)} position={1} count={1} />);
 
     expect(datapointRowSpy).toHaveBeenCalledTimes(1);
-    expect(datapointRowSpy).toHaveBeenCalledWith({
+    // DatapointRow is rendered as a JSX element, so Preact calls it with
+    // (props, context). Assert on the props (first arg); `key` is stripped out.
+    expect(datapointRowSpy.mock.calls[0][0]).toEqual({
       goal: "weight",
       point: {
         id: DATAPOINT_ID,
