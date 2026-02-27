@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createDatapoint, deleteDatapoint } from "../services/beeminder";
+import queryClient from "../queryClient";
 import cnx from "../cnx";
 import "./datapointRow.css";
 import { Copy, Trash } from "lucide-preact";
@@ -16,8 +17,12 @@ export default function DatapointRow({
     value: number;
   };
 }) {
-  const del = useMutation(() => deleteDatapoint(goal, point.id));
-  const copy = useMutation(() => createDatapoint(goal, point.value));
+  const del = useMutation(() => deleteDatapoint(goal, point.id), {
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
+  });
+  const copy = useMutation(() => createDatapoint(goal, point.value), {
+    onSuccess: () => queryClient.invalidateQueries(["goals"]),
+  });
 
   return (
     <tr key={point.id} data-id={point.id} class="datapoint-row">
