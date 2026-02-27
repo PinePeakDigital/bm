@@ -88,7 +88,8 @@ export default function Controls({
       {!refreshOnly && (
         <>
           <input
-            type="number"
+            type={g.hhmmformat ? "text" : "number"}
+            placeholder={g.hhmmformat ? "0:00" : undefined}
             value={value}
             onChange={(e) => setValue(e.currentTarget.value)}
             onKeyDown={(e) => {
