@@ -34,7 +34,9 @@ const items: (ItemLink | ItemButton)[] = [
   {
     name: "Add goal",
     icon: <CirclePlus />,
-    url: beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/new"),
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/new");
+    },
   },
   {
     name: "Add breaks",
@@ -48,13 +50,15 @@ const items: (ItemLink | ItemButton)[] = [
         return;
       }
       const url = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/breaks?start=${start}&finish=${finish}`);
-      window.open(url);
+      window.open(url, "_blank", "noopener,noreferrer");
     },
   },
   {
     name: "Account settings",
     icon: <Settings />,
-    url: beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/settings/account"),
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/settings/account");
+    },
   },
   {
     name: "Blog",
@@ -69,7 +73,9 @@ const items: (ItemLink | ItemButton)[] = [
   {
     name: "Premium",
     icon: <Gem />,
-    url: beeminderAuthUrl(USERNAME, API_KEY, "https://www.beeminder.com/premium"),
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://www.beeminder.com/premium");
+    },
   },
   {
     name: "Logout",

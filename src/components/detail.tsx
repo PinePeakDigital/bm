@@ -72,7 +72,11 @@ export default function Detail({
       <div class="detail__header">
         <div>
           <a
-            href={beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/${USERNAME}/${g.slug}`)}
+            href={`https://beeminder.com/${USERNAME}/${g.slug}`}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/${USERNAME}/${g.slug}`);
+            }}
             class="detail__headerText"
           >
             <h1>{g.slug}</h1>
