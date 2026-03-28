@@ -1,5 +1,6 @@
 import { useIsFetching } from "@tanstack/react-query";
-import { logout } from "../auth";
+import { logout, USERNAME, API_KEY } from "../auth";
+import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
 import queryClient from "../queryClient";
 import "./header.css";
 import { JSX } from "preact/jsx-runtime";
@@ -33,7 +34,9 @@ const items: (ItemLink | ItemButton)[] = [
   {
     name: "Add goal",
     icon: <CirclePlus />,
-    url: "https://beeminder.com/new",
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/new");
+    },
   },
   {
     name: "Add breaks",
@@ -41,14 +44,21 @@ const items: (ItemLink | ItemButton)[] = [
     onClick: () => {
       const start = window.prompt("Start date (YYYY-MM-DD)") || "";
       const finish = window.prompt("Finish date (YYYY-MM-DD)") || "";
-      const url = `https://beeminder.com/breaks?start=${start}&finish=${finish}`;
-      window.open(url);
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+      if (!datePattern.test(start) || !datePattern.test(finish)) {
+        window.alert("Invalid date format. Please use YYYY-MM-DD.");
+        return;
+      }
+      const url = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/breaks?start=${start}&finish=${finish}`);
+      window.open(url, "_blank", "noopener,noreferrer");
     },
   },
   {
     name: "Account settings",
     icon: <Settings />,
-    url: "https://beeminder.com/settings/account",
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/settings/account");
+    },
   },
   {
     name: "Blog",
@@ -63,7 +73,9 @@ const items: (ItemLink | ItemButton)[] = [
   {
     name: "Premium",
     icon: <Gem />,
-    url: "https://www.beeminder.com/premium",
+    onClick: () => {
+      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://www.beeminder.com/premium");
+    },
   },
   {
     name: "Logout",

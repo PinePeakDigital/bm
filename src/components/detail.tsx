@@ -1,5 +1,6 @@
-import { USERNAME } from "../auth";
+import { USERNAME, API_KEY } from "../auth";
 import { Goal } from "../services/beeminder";
+import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
 import groupGoals from "../lib/groupGoals";
 import useGoals from "../useGoals";
 import Controls from "./controls";
@@ -72,6 +73,10 @@ export default function Detail({
         <div>
           <a
             href={`https://beeminder.com/${USERNAME}/${g.slug}`}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/${USERNAME}/${g.slug}`);
+            }}
             class="detail__headerText"
           >
             <h1>{g.slug}</h1>
