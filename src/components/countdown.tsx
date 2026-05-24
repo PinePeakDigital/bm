@@ -2,6 +2,7 @@ import { Goal } from "../services/beeminder";
 import { useState, useEffect } from "preact/hooks";
 import "./countdown.css";
 import { ComponentChildren } from "preact";
+import { Flag, Hourglass, Skull } from "lucide-preact";
 
 const Unit: Record<string, number> = {
   s: 1,
@@ -50,11 +51,43 @@ export default function Countdown({ g }: { g: Goal }) {
     };
   }, [g, seconds]);
 
-  if (seconds < 0) return <W>💀</W>;
+  if (g.won)
+    return (
+      <W>
+        <Flag
+          class="countdown-icon"
+          size={20}
+          role="img"
+          aria-label="Goal completed"
+        />
+      </W>
+    );
+
+  if (seconds < 0)
+    return (
+      <W>
+        <Skull
+          class="countdown-icon"
+          size={20}
+          role="img"
+          aria-label="Goal derailed"
+        />
+      </W>
+    );
 
   const u = findUnit(seconds);
 
-  if (!u) return <W>🤷‍♂️</W>;
+  if (!u)
+    return (
+      <W>
+        <Hourglass
+          class="countdown-icon"
+          size={20}
+          role="img"
+          aria-label="Due now"
+        />
+      </W>
+    );
 
   return (
     <W>
