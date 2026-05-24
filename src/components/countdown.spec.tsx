@@ -54,10 +54,15 @@ describe("Countdown", () => {
   });
 
   it("shows the remaining time for an active goal", () => {
-    const { container } = render(<Countdown g={makeGoal({})} />);
+    // 2.5 days out so Math.floor lands on 2d regardless of sub-second drift.
+    const losedate = Math.floor(Date.now() / 1000) + 60 * 60 * 60;
+
+    const { container } = render(
+      <Countdown g={makeGoal({ losedate, baremin: "1" })} />
+    );
 
     expect(container.querySelector(".lucide-flag")).not.toBeInTheDocument();
     expect(container.querySelector(".lucide-skull")).not.toBeInTheDocument();
-    expect(container.textContent).toContain("in");
+    expect(container.textContent).toContain("1 in 2d");
   });
 });
