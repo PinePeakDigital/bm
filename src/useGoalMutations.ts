@@ -19,8 +19,8 @@ type Context = { previous?: Goal[] };
 //   3. invalidate the goals query once it settles so we refetch the truth.
 //
 // This is the one place that knows the cache shape and the query key. Callers
-// just express intent.
-function goalMutationOptions<TVariables>(
+// just express intent. Exported for unit testing of the cache callbacks.
+export function goalMutationOptions<TVariables>(
   slug: string
 ): UseMutationOptions<unknown, unknown, TVariables, Context> {
   return {
