@@ -42,6 +42,17 @@ describe("Countdown", () => {
     expect(container.querySelector(".lucide-flag")).not.toBeInTheDocument();
   });
 
+  it("shows an hourglass when the goal is due within a second", () => {
+    const losedate = Date.now() / 1000 + 0.5;
+
+    const { container } = render(
+      <Countdown g={makeGoal({ won: false, losedate })} />
+    );
+
+    expect(container.querySelector(".lucide-hourglass")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-skull")).not.toBeInTheDocument();
+  });
+
   it("shows the remaining time for an active goal", () => {
     const { container } = render(<Countdown g={makeGoal({})} />);
 
