@@ -1,5 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
-import { createDatapoint, deleteDatapoint } from "../services/beeminder";
+import useGoalMutations from "../useGoalMutations";
 import cnx from "../cnx";
 import "./datapointRow.css";
 import { Copy, Trash } from "lucide-preact";
@@ -16,8 +15,7 @@ export default function DatapointRow({
     value: number;
   };
 }) {
-  const del = useMutation(() => deleteDatapoint(goal, point.id));
-  const copy = useMutation(() => createDatapoint(goal, point.value));
+  const { removeDatapoint: del, copyDatapoint: copy } = useGoalMutations(goal);
 
   return (
     <tr key={point.id} data-id={point.id} class="datapoint-row">
@@ -30,7 +28,7 @@ export default function DatapointRow({
           class={cnx("icon-button", del.isLoading && "spin")}
           onClick={() => {
             if (confirm("Are you sure you want to delete this datapoint?")) {
-              del.mutate();
+              del.mutate(point.id);
             }
           }}
         >
@@ -39,7 +37,7 @@ export default function DatapointRow({
         <button
           type="button"
           class={cnx("icon-button", copy.isLoading && "spin")}
-          onClick={() => copy.mutate()}
+          onClick={() => copy.mutate(point.value)}
         >
           <Copy />
         </button>

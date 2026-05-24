@@ -1,26 +1,10 @@
 import "./goal.css";
-import { createDatapoint, refreshGraph, Goal } from "../services/beeminder";
-import { useMutation } from "@tanstack/react-query";
-import queryClient from "../queryClient";
+import { Goal } from "../services/beeminder";
+import useGoalMutations from "../useGoalMutations";
 import cnx from "../cnx";
 import { useState } from "preact/hooks";
 import "./controls.css";
 import { Plus, RefreshCw } from "lucide-preact";
-
-async function q(slug: string, mutate: () => Promise<unknown>) {
-  const cached = queryClient.getQueryData<Goal[]>(["goals"]);
-  if (!cached) return;
-  const index = cached.findIndex((x) => x.slug === slug);
-  if (index === -1) return;
-  cached[index] = {
-    ...cached[index],
-    queued: true,
-  };
-  queryClient.setQueryData(["goals"], cached);
-  const result = await mutate();
-  await queryClient.invalidateQueries(["goals"]);
-  return result;
-}
 
 function getErrorMessage(error: unknown) {
   if (typeof error === "string") return error;
@@ -50,22 +34,12 @@ export default function Controls({
   refreshOnly?: boolean;
 }) {
   const [value, setValue] = useState<string>("");
-  const c = useMutation(
-    (v: number) => q(g.slug, () => createDatapoint(g.slug, v)),
-    {
-      onSuccess: () => setValue(""),
-    }
-  );
+  const { addDatapoint, refresh: refreshGoal } = useGoalMutations(g.slug);
   const autodata = getAutodata(g);
-  const r = useMutation(() =>
-    q(g.slug, () =>
-      typeof autodata === "string" ? fetch(autodata) : refreshGraph(g.slug)
-    )
-  );
-  const isLoading = c.isLoading || r.isLoading || g.queued;
-  const isError = c.isError || r.isError;
+  const isLoading = addDatapoint.isLoading || refreshGoal.isLoading || g.queued;
+  const isError = addDatapoint.isError || refreshGoal.isError;
   const tooltip = isError
-    ? getErrorMessage(c.error || r.error)
+    ? getErrorMessage(addDatapoint.error || refreshGoal.error)
     : autodata
     ? "Refresh"
     : "Add datapoint";
@@ -73,12 +47,13 @@ export default function Controls({
   const submit = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     const v = parseValue(value);
-    if (Number.isFinite(v)) c.mutate(v);
+    if (Number.isFinite(v))
+      addDatapoint.mutate(v, { onSuccess: () => setValue("") });
   };
 
   const refresh = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-    r.mutate();
+    refreshGoal.mutate(autodata);
   };
 
   if (refreshOnly && !autodata) return null;
