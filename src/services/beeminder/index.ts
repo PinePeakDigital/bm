@@ -2,6 +2,24 @@ import { API_KEY } from "../../auth";
 
 const API_ROOT = "https://www.beeminder.com/api/v1";
 
+// The Beeminder API's error mode is part of this module's interface: every
+// non-2xx response surfaces as a BeeminderApiError carrying the HTTP `status`,
+// so callers can reliably branch on it (e.g. logging out on 401) instead of
+// string-matching a generic Error's message.
+export class BeeminderApiError extends Error {
+  readonly status: number;
+  readonly statusText: string;
+  readonly body?: string;
+
+  constructor(status: number, statusText: string, body?: string) {
+    super(`${status} ${statusText}`);
+    this.name = "BeeminderApiError";
+    this.status = status;
+    this.statusText = statusText;
+    this.body = body;
+  }
+}
+
 export type Datapoint = {
   id: string;
   timestamp: number;
@@ -173,7 +191,8 @@ async function api({
   });
 
   if (!result.ok) {
-    throw new Error(`${result.status} ${result.statusText}`);
+    const body = await result.text().catch(() => "");
+    throw new BeeminderApiError(result.status, result.statusText, body || undefined);
   }
 
   return result.json();
