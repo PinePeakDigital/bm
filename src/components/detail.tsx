@@ -115,7 +115,7 @@ export default function Detail({
               DatapointRow({
                 goal: g.slug,
                 point: {
-                  id: point.id.$oid,
+                  id: point.id,
                   daystamp: point.daystamp,
                   comment: point.comment,
                   value: point.value,

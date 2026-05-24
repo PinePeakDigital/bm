@@ -109,9 +109,7 @@ export type Goal = {
     created_at: string;
     daystamp: string;
     fulltext: string;
-    id: {
-      $oid: string;
-    };
+    id: string;
     measured_at: string;
     origin: string;
     urtext?: string;
