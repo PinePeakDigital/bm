@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 // Mock auth so we can assert logout() without touching localStorage or
 // navigating. `vi.hoisted` defines the spy above the hoisted vi.mock factory.
 const { logout } = vi.hoisted(() => ({ logout: vi.fn() }));
-vi.mock("./auth", () => ({ logout, API_KEY: "test-token" }));
+vi.mock("./auth", () => ({ logout, isAuthenticated: () => true }));
 
 import { handleGoalsError } from "./useGoals";
 import { BeeminderApiError } from "./services/beeminder";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { API_KEY, logout } from "./auth";
+import { isAuthenticated, logout } from "./auth";
 import { getGoals, Goal, BeeminderApiError } from "./services/beeminder";
 
 // The single source of truth for the goals query key. Anything that reads or
@@ -19,7 +19,7 @@ export function handleGoalsError(err: Error) {
 
 export default function useGoals() {
   return useQuery<Goal[], Error>(GOALS_QUERY_KEY, () => getGoals(), {
-    enabled: !!API_KEY,
+    enabled: isAuthenticated(),
     refetchInterval: (d) => (d?.find((g) => g.queued) ? 3000 : 60000),
     refetchIntervalInBackground: false,
     retry: false,
