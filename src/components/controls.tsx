@@ -1,6 +1,7 @@
 import "./goal.css";
 import { Goal } from "../services/beeminder";
 import useGoalMutations from "../useGoalMutations";
+import { getAutodata } from "../lib/directives";
 import cnx from "../cnx";
 import { useState } from "preact/hooks";
 import "./controls.css";
@@ -10,12 +11,6 @@ function getErrorMessage(error: unknown) {
   if (typeof error === "string") return error;
   if (error instanceof Error) return error.message;
   return JSON.stringify(error);
-}
-
-function getAutodata(g: Goal): boolean | string {
-  const match = g.fineprint?.match(/#bmAutodata=(\S+)/);
-
-  return match?.[1] || !!g.autodata;
 }
 
 function parseValue(value: string): number {
