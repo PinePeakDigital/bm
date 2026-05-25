@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 // Mock auth so we can assert logout() without touching localStorage or
 // navigating. `vi.hoisted` defines the spy above the hoisted vi.mock factory.
@@ -12,6 +12,11 @@ describe("handleGoalsError", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, "error").mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    // Restore the console.error spy so it can't leak into other test files.
+    vi.restoreAllMocks();
   });
 
   it("logs the user out on a 401 BeeminderApiError", () => {
