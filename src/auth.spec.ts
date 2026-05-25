@@ -58,12 +58,13 @@ describe("session", () => {
   });
 
   describe("logout", () => {
-    it("clears the stored credentials", () => {
+    it("clears the stored credentials and redirects to the root", () => {
       login("alice", "tok_123");
       logout();
 
       expect(getCredentials()).toEqual({ username: "", apiKey: "" });
       expect(isAuthenticated()).toBe(false);
+      expect(window.location.href).toBe("/");
     });
   });
 });
