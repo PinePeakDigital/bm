@@ -1,4 +1,4 @@
-import { USERNAME, API_KEY } from "../auth";
+import { getCredentials } from "../auth";
 import { Goal } from "../services/beeminder";
 import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
 import Controls from "./controls";
@@ -38,6 +38,7 @@ export default function Detail({
   count: number;
 }) {
   const r = sigfigs(g.mathishard[2]);
+  const { username, apiKey } = getCredentials();
 
   return (
     <div
@@ -68,10 +69,10 @@ export default function Detail({
       <div class="detail__header">
         <div>
           <a
-            href={`https://beeminder.com/${USERNAME}/${g.slug}`}
+            href={`https://beeminder.com/${username}/${g.slug}`}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/${USERNAME}/${g.slug}`);
+              window.location.href = beeminderAuthUrl(username, apiKey, `https://beeminder.com/${username}/${g.slug}`);
             }}
             class="detail__headerText"
           >

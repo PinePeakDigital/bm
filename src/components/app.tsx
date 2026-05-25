@@ -3,7 +3,7 @@ import { Goal } from "../services/beeminder";
 import "./app.css";
 import { Goals } from "./goals";
 import { useState } from "preact/hooks";
-import { API_KEY } from "../auth";
+import { isAuthenticated } from "../auth";
 import useGoals from "../useGoals";
 import Login from "./login";
 import queryClient from "../queryClient";
@@ -15,7 +15,7 @@ function _App() {
   const [filter, setFilter] = useState("");
   const { data } = useGoals();
 
-  if (!API_KEY) return <Login />;
+  if (!isAuthenticated()) return <Login />;
   if (data === undefined) return <Center>Loading...</Center>;
 
   const r = new RegExp(filter, "i");

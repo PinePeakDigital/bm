@@ -1,4 +1,4 @@
-import { API_KEY } from "../../auth";
+import { getCredentials } from "../../auth";
 
 const API_ROOT = "https://www.beeminder.com/api/v1";
 
@@ -182,13 +182,16 @@ async function api({
   method?: "get" | "post" | "put" | "delete";
   data?: Record<string, unknown>;
 }) {
-  const result = await fetch(`${API_ROOT}${route}?auth_token=${API_KEY}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  const result = await fetch(
+    `${API_ROOT}${route}?auth_token=${getCredentials().apiKey}`,
+    {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!result.ok) {
     const body = await result.text().catch(() => "");

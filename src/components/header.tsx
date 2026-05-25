@@ -1,5 +1,5 @@
 import { useIsFetching } from "@tanstack/react-query";
-import { logout, USERNAME, API_KEY } from "../auth";
+import { logout, getCredentials } from "../auth";
 import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
 import queryClient from "../queryClient";
 import "./header.css";
@@ -35,7 +35,8 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Add goal",
     icon: <CirclePlus />,
     onClick: () => {
-      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/new");
+      const { username, apiKey } = getCredentials();
+      window.location.href = beeminderAuthUrl(username, apiKey, "https://beeminder.com/new");
     },
   },
   {
@@ -49,7 +50,8 @@ const items: (ItemLink | ItemButton)[] = [
         window.alert("Invalid date format. Please use YYYY-MM-DD.");
         return;
       }
-      const url = beeminderAuthUrl(USERNAME, API_KEY, `https://beeminder.com/breaks?start=${start}&finish=${finish}`);
+      const { username, apiKey } = getCredentials();
+      const url = beeminderAuthUrl(username, apiKey, `https://beeminder.com/breaks?start=${start}&finish=${finish}`);
       window.open(url, "_blank", "noopener,noreferrer");
     },
   },
@@ -57,7 +59,8 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Account settings",
     icon: <Settings />,
     onClick: () => {
-      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://beeminder.com/settings/account");
+      const { username, apiKey } = getCredentials();
+      window.location.href = beeminderAuthUrl(username, apiKey, "https://beeminder.com/settings/account");
     },
   },
   {
@@ -74,7 +77,8 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Premium",
     icon: <Gem />,
     onClick: () => {
-      window.location.href = beeminderAuthUrl(USERNAME, API_KEY, "https://www.beeminder.com/premium");
+      const { username, apiKey } = getCredentials();
+      window.location.href = beeminderAuthUrl(username, apiKey, "https://www.beeminder.com/premium");
     },
   },
   {
