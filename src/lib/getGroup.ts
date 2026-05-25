@@ -1,10 +1,7 @@
 import { Goal } from "../services/beeminder";
+import { isPinned } from "./directives";
 
 const LATER_BUFFER_THRESHOLD = 7;
-
-function isPinned(g: Goal): boolean {
-  return g.goal_type === "drinker" || g.fineprint?.includes("#bmPin") || false;
-}
 
 function isDue(g: Goal): boolean {
   return g.safebuf === 0;
