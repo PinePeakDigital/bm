@@ -15,6 +15,16 @@ describe("isPinned", () => {
     expect(isPinned(goal({ fineprint: "some notes #bmPin here" }))).toBe(true);
   });
 
+  it("does not treat a longer neighbour like #bmPinned as #bmPin", () => {
+    expect(isPinned(goal({ goal_type: "hustler", fineprint: "#bmPinned" }))).toBe(
+      false
+    );
+  });
+
+  it("still pins when #bmPin is followed by punctuation", () => {
+    expect(isPinned(goal({ fineprint: "pinned, see #bmPin." }))).toBe(true);
+  });
+
   it("does not pin an ordinary goal", () => {
     expect(isPinned(goal({ goal_type: "hustler", fineprint: "no tags" }))).toBe(
       false

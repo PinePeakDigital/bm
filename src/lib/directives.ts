@@ -5,9 +5,10 @@ import { Goal } from "../services/beeminder";
 // the one place that knows that encoding — callers ask for the concept (is this
 // goal pinned? what's its autodata?), not the regex.
 
-// A bare flag directive, e.g. `#bmPin`.
+// A bare flag directive, e.g. `#bmPin`. Matched as a whole token (trailing word
+// boundary) so neighbours like `#bmPinned` don't count as `#bmPin`.
 function hasFlag(g: Goal, name: string): boolean {
-  return g.fineprint?.includes(`#${name}`) ?? false;
+  return new RegExp(`#${name}\\b`).test(g.fineprint ?? "");
 }
 
 // A `#name=value` directive, e.g. `#bmAutodata=https://example.com`. Returns the
