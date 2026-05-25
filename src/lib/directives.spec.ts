@@ -25,6 +25,12 @@ describe("isPinned", () => {
     expect(isPinned(goal({ fineprint: "pinned, see #bmPin." }))).toBe(true);
   });
 
+  it("does not match a # that appears mid-token (e.g. foo#bmPin)", () => {
+    expect(isPinned(goal({ goal_type: "hustler", fineprint: "foo#bmPin" }))).toBe(
+      false
+    );
+  });
+
   it("does not pin an ordinary goal", () => {
     expect(isPinned(goal({ goal_type: "hustler", fineprint: "no tags" }))).toBe(
       false
@@ -57,6 +63,12 @@ describe("getAutodata", () => {
 
   it("returns false when there is no autodata of any kind", () => {
     expect(getAutodata(goal({ fineprint: "no directives here" }))).toBe(false);
+  });
+
+  it("does not match a #bmAutodata that appears mid-token", () => {
+    expect(
+      getAutodata(goal({ fineprint: "note(foo#bmAutodata=https://x)" }))
+    ).toBe(false);
   });
 
   it("returns false (and does not throw) when fineprint is missing", () => {
