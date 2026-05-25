@@ -8,14 +8,13 @@ import { render } from "@testing-library/preact";
 //
 // DatapointRow and Controls are stubbed so the test doesn't need a react-query
 // provider (react-query's hooks require the preact/compat React alias, which is
-// not wired up under vitest); useGoals is stubbed for the same reason.
+// not wired up under vitest).
 const { datapointRowSpy } = vi.hoisted(() => ({
   datapointRowSpy: vi.fn(() => null),
 }));
 
 vi.mock("./datapointRow", () => ({ default: datapointRowSpy }));
 vi.mock("./controls", () => ({ default: () => null }));
-vi.mock("../useGoals", () => ({ default: () => ({ data: [] }) }));
 
 import Detail from "./detail";
 import { Goal } from "../services/beeminder";
@@ -54,7 +53,7 @@ function makeGoal(recentId: string): Goal {
 
 describe("Detail recent data", () => {
   it("passes the datapoint's string id down, not an undefined $oid", () => {
-    render(<Detail g={makeGoal(DATAPOINT_ID)} />);
+    render(<Detail g={makeGoal(DATAPOINT_ID)} position={1} count={1} />);
 
     expect(datapointRowSpy).toHaveBeenCalledTimes(1);
     expect(datapointRowSpy).toHaveBeenCalledWith({

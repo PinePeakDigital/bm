@@ -1,8 +1,6 @@
 import { USERNAME, API_KEY } from "../auth";
 import { Goal } from "../services/beeminder";
 import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
-import groupGoals from "../lib/groupGoals";
-import useGoals from "../useGoals";
 import Controls from "./controls";
 import DatapointRow from "./datapointRow";
 import "./detail.css";
@@ -29,19 +27,17 @@ export default function Detail({
   g,
   goPrev,
   goNext,
+  position,
+  count,
 }: {
   g: Goal;
   goNext?: VoidFunction;
   goPrev?: VoidFunction;
+  // 1-based position of this goal among all goals, and the total, for the pager.
+  position: number;
+  count: number;
 }) {
-  const { data = [] } = useGoals();
-  const grouped = groupGoals(data);
-  const goals = Object.values(grouped).flat();
-  const i = goals.findIndex((g2) => g2.slug === g.slug);
-  const p = i === undefined ? "?" : i + 1;
   const r = sigfigs(g.mathishard[2]);
-
-  console.log({ g });
 
   return (
     <div
@@ -59,7 +55,7 @@ export default function Detail({
         </button>
         <span>{g.limsumdate}</span>
         <span>
-          {p} of {goals.length}
+          {position} of {count}
         </span>
         <button
           onClick={() => goNext?.()}

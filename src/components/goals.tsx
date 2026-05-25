@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "preact/hooks";
 import { Goal } from "../services/beeminder";
 import groupGoals from "../lib/groupGoals";
+import goalNavigation from "../lib/goalNavigation";
 import Detail from "./detail";
 import G from "./goal";
 import "./goals.css";
@@ -9,13 +10,16 @@ import Modal from "./modal";
 export function Goals({ goals }: { goals: Goal[] }) {
   const [slug, setSlug] = useState<string>();
   const g = useMemo(() => groupGoals(goals), [goals]);
-  const a = Object.values(g).flat();
-  const i = a.findIndex((g) => g.slug === slug);
-  const c = a[i];
-  const n = a[i + 1];
-  const p = a[i - 1];
-  const goPrev = useMemo(() => (p ? () => setSlug(p.slug) : undefined), [p]);
-  const goNext = useMemo(() => (n ? () => setSlug(n.slug) : undefined), [n]);
+  const nav = useMemo(() => goalNavigation(goals, slug), [goals, slug]);
+  const { prev, next } = nav;
+  const goPrev = useMemo(
+    () => (prev ? () => setSlug(prev.slug) : undefined),
+    [prev]
+  );
+  const goNext = useMemo(
+    () => (next ? () => setSlug(next.slug) : undefined),
+    [next]
+  );
   const close = () => setSlug(undefined);
 
   useEffect(() => {
@@ -45,11 +49,17 @@ export function Goals({ goals }: { goals: Goal[] }) {
           <G key={g.slug} g={g} onClick={() => setSlug(g.slug)} />
         ))}
       </div>
-      {
-        <Modal open={!!slug} onClose={close}>
-          <Detail g={c} goPrev={goPrev} goNext={goNext} />
-        </Modal>
-      }
+      <Modal open={!!nav.current} onClose={close}>
+        {nav.current && (
+          <Detail
+            g={nav.current}
+            goPrev={goPrev}
+            goNext={goNext}
+            position={nav.index + 1}
+            count={nav.count}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
