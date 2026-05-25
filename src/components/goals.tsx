@@ -49,7 +49,7 @@ export function Goals({ goals }: { goals: Goal[] }) {
           <G key={g.slug} g={g} onClick={() => setSlug(g.slug)} />
         ))}
       </div>
-      <Modal open={!!slug} onClose={close}>
+      <Modal open={!!nav.current} onClose={close}>
         {nav.current && (
           <Detail
             g={nav.current}

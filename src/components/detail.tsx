@@ -34,8 +34,8 @@ export default function Detail({
   goNext?: VoidFunction;
   goPrev?: VoidFunction;
   // 1-based position of this goal among all goals, and the total, for the pager.
-  position?: number;
-  count?: number;
+  position: number;
+  count: number;
 }) {
   const r = sigfigs(g.mathishard[2]);
 

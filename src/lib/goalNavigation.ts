@@ -22,7 +22,15 @@ export default function goalNavigation(
   goals: Goal[],
   currentSlug?: string
 ): GoalNavigation {
-  const ordered = Object.values(groupGoals(goals)).flat();
+  // Flatten the groups explicitly so the display/traversal order is locked here
+  // rather than relying on object key iteration order.
+  const grouped = groupGoals(goals);
+  const ordered = [
+    ...grouped.pinned,
+    ...grouped.today,
+    ...grouped.next,
+    ...grouped.later,
+  ];
   const index = ordered.findIndex((g) => g.slug === currentSlug);
 
   return {

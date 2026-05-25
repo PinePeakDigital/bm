@@ -53,7 +53,7 @@ function makeGoal(recentId: string): Goal {
 
 describe("Detail recent data", () => {
   it("passes the datapoint's string id down, not an undefined $oid", () => {
-    render(<Detail g={makeGoal(DATAPOINT_ID)} />);
+    render(<Detail g={makeGoal(DATAPOINT_ID)} position={1} count={1} />);
 
     expect(datapointRowSpy).toHaveBeenCalledTimes(1);
     expect(datapointRowSpy).toHaveBeenCalledWith({
