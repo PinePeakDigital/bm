@@ -1,10 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import {
-  isPlainLeftClick,
-  startViewTransition,
-  markInternalNavigation,
-  hasInternalHistory,
-} from "./viewTransition";
+import { isPlainLeftClick, startViewTransition } from "./viewTransition";
 
 function clickEvent(overrides: Partial<MouseEvent>): MouseEvent {
   return {
@@ -56,15 +51,5 @@ describe("startViewTransition", () => {
 
     expect(start).toHaveBeenCalledTimes(1);
     expect(update).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe("internal navigation latch", () => {
-  it("starts false and latches true once marked", () => {
-    // Order matters: the flag is a module-global, one-way latch, so assert the
-    // initial state before flipping it.
-    expect(hasInternalHistory()).toBe(false);
-    markInternalNavigation();
-    expect(hasInternalHistory()).toBe(true);
   });
 });

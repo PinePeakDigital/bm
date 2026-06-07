@@ -34,18 +34,3 @@ export function isPlainLeftClick(e: MouseEvent): boolean {
     !e.altKey
   );
 }
-
-// Whether we've performed at least one in-app navigation this page load. Used to
-// decide whether a "back" affordance can safely pop history (returning the user
-// to their scroll position on the dashboard) or must fall back to navigating to
-// a known route — the SPA equivalent of the post's document.referrer check, since
-// document.referrer doesn't update on client-side navigation.
-let internalNavigationHappened = false;
-
-export function markInternalNavigation(): void {
-  internalNavigationHappened = true;
-}
-
-export function hasInternalHistory(): boolean {
-  return internalNavigationHappened;
-}

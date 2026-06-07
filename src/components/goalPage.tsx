@@ -5,12 +5,7 @@ import useGoals from "../useGoals";
 import goalNavigation from "../lib/goalNavigation";
 import Detail from "./detail";
 import Center from "./center";
-import {
-  hasInternalHistory,
-  isPlainLeftClick,
-  markInternalNavigation,
-  startViewTransition,
-} from "../lib/viewTransition";
+import { isPlainLeftClick, startViewTransition } from "../lib/viewTransition";
 import buildHref from "../lib/buildHref";
 import "./goalPage.css";
 
@@ -28,7 +23,6 @@ export default function GoalPage() {
   const { prev, next, current } = nav;
 
   const goTo = (target: string) => {
-    markInternalNavigation();
     startViewTransition(() =>
       // The beta router types `params` as an updater; at runtime it threads a
       // plain object through functionalUpdate, so an object is correct here.
@@ -42,22 +36,16 @@ export default function GoalPage() {
   const goPrev = prev ? () => goTo(prev.slug) : undefined;
   const goNext = next ? () => goTo(next.slug) : undefined;
 
-  // Back, the SPA-friendly way the post describes: if we got here by navigating
-  // within the app, pop history so the previous view returns at its scroll
-  // position; otherwise (e.g. a deep link or hard refresh) navigate home so the
-  // button never strands the user outside the app.
-  const goBack = () => {
-    if (hasInternalHistory()) {
-      startViewTransition(() => window.history.back());
-      return;
-    }
-    markInternalNavigation();
+  // Go to the dashboard. This is an explicit "to the dashboard" affordance, not
+  // a history pop — the browser's own Back button already handles the history
+  // stack, so leaving a goal always returns you to the grid.
+  const goToDashboard = () => {
     startViewTransition(() =>
       navigate({ to: "/" } as Parameters<typeof navigate>[0])
     );
   };
 
-  // Keyboard pager carried over from the old modal: a/d page, Escape closes.
+  // Keyboard pager carried over from the old modal: a/d page, Escape leaves.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       // Don't hijack keys while the user is typing in a field (e.g. the
@@ -73,7 +61,7 @@ export default function GoalPage() {
       }
       if (e.key === "a") return goPrev?.();
       if (e.key === "d") return goNext?.();
-      if (e.key === "Escape") return goBack();
+      if (e.key === "Escape") return goToDashboard();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -100,10 +88,10 @@ export default function GoalPage() {
           onClick={(e) => {
             if (!isPlainLeftClick(e)) return;
             e.preventDefault();
-            goBack();
+            goToDashboard();
           }}
         >
-          <ArrowLeft /> <span>Back</span>
+          <ArrowLeft /> <span>Dashboard</span>
         </a>
         <Detail
           g={current}

@@ -1,11 +1,7 @@
 import { ComponentChildren } from "preact";
 import { JSX } from "preact/jsx-runtime";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  isPlainLeftClick,
-  markInternalNavigation,
-  startViewTransition,
-} from "../lib/viewTransition";
+import { isPlainLeftClick, startViewTransition } from "../lib/viewTransition";
 import buildHref from "../lib/buildHref";
 
 // A real anchor that navigates client-side (inside a view transition) on a
@@ -29,7 +25,6 @@ export default function ViewLink({
       onClick={(e) => {
         if (!isPlainLeftClick(e)) return;
         e.preventDefault();
-        markInternalNavigation();
         startViewTransition(() =>
           // Cast: the beta router's navigate is generically typed against the
           // route tree; `params` is an object the runtime threads through
