@@ -1,0 +1,21 @@
+/* The single-goal page: a centred, readable column rather than the modal's
+   fixed 500px box. */
+.goalPage {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: var(--padding);
+}
+
+.goalPage__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: var(--padding);
+  font-size: 0.9rem;
+}
+
+.goalPage .detail {
+  background-color: var(--bg);
+  border-radius: 5px;
+  overflow: hidden;
+}

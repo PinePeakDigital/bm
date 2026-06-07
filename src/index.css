@@ -9,3 +9,13 @@ html,
 body {
   overflow-x: hidden;
 }
+
+/* Enhance page-to-page navigation with a quick cross-fade where the browser
+   supports the View Transitions API. Purely progressive: browsers without it
+   just navigate, and users who prefer reduced motion keep the instant cut. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 180ms;
+  }
+}

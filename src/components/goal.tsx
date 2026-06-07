@@ -3,18 +3,14 @@ import "./goal.css";
 import Controls from "./controls";
 import Countdown from "./countdown";
 import { getGroup } from "../lib/getGroup";
+import ViewLink from "./viewLink";
 
-export default function GoalComponent({
-  g,
-  onClick,
-}: {
-  g: Goal;
-  onClick: () => void;
-}) {
+export default function GoalComponent({ g }: { g: Goal }) {
   return (
-    <div
+    <ViewLink
+      to="/goal/$slug"
+      params={{ slug: g.slug }}
       class={`goal ${getGroup(g)}`}
-      onClick={() => onClick()}
       style={{
         "--goal-color": `var(--${g.roadstatuscolor})`,
       }}
@@ -24,7 +20,7 @@ export default function GoalComponent({
         <Controls g={g} refreshOnly />
       </span>
       <Countdown g={g} />
-      <span className="stakes">${g.pledge}</span>
-    </div>
+      <span class="stakes">${g.pledge}</span>
+    </ViewLink>
   );
 }
