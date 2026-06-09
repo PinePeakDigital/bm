@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import { Goal } from "../services/beeminder";
 import useGoals from "../useGoals";
+import filterGoals from "../lib/filterGoals";
 import { Goals } from "./goals";
 import Header from "./header";
 import Center from "./center";
@@ -13,21 +13,7 @@ export default function Dashboard() {
 
   if (data === undefined) return <Center>Loading...</Center>;
 
-  // The filter doubles as a regex for power users, but a half-typed pattern
-  // (e.g. a lone "[") makes the RegExp constructor throw, which would crash the
-  // page. Fall back to a plain substring match when the pattern is invalid.
-  let r: RegExp | null = null;
-  try {
-    r = new RegExp(filter, "i");
-  } catch {
-    r = null;
-  }
-  const filtered = data.filter((g: Goal) => {
-    if (!filter) return true;
-    return r
-      ? r.test(g.slug)
-      : g.slug.toLowerCase().includes(filter.toLowerCase());
-  });
+  const filtered = filterGoals(data, filter);
 
   return (
     <>

@@ -7,6 +7,7 @@ import Detail from "./detail";
 import Center from "./center";
 import { isPlainLeftClick, startViewTransition } from "../lib/viewTransition";
 import buildHref from "../lib/buildHref";
+import goalKeyAction from "../lib/goalKeyAction";
 import "./goalPage.css";
 
 const goalHref = (slug: string) => buildHref("/goal/$slug", { slug });
@@ -33,8 +34,11 @@ export default function GoalPage() {
     );
   };
 
-  const goPrev = prev ? () => goTo(prev.slug) : undefined;
-  const goNext = next ? () => goTo(next.slug) : undefined;
+  // Only offer paging when we're actually on a goal — on the not-found page
+  // `current` is undefined but goalNavigation still reports a `next` (the first
+  // goal), and we don't want the pager keys jumping off the not-found page.
+  const goPrev = current && prev ? () => goTo(prev.slug) : undefined;
+  const goNext = current && next ? () => goTo(next.slug) : undefined;
 
   // Go to the dashboard. This is an explicit "to the dashboard" affordance, not
   // a history pop — the browser's own Back button already handles the history
@@ -48,24 +52,14 @@ export default function GoalPage() {
   // Keyboard pager carried over from the old modal: a/d page, Escape leaves.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      // Leave modified chords (Ctrl/⌘/Alt) and already-handled events to the
-      // browser so we don't hijack its shortcuts.
-      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
-      // Don't hijack keys while the user is typing in a field (e.g. the
-      // add-datapoint input on this page) — let a/d/Escape reach the input.
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable)
-      ) {
-        return;
+      switch (goalKeyAction(e)) {
+        case "prev":
+          return goPrev?.();
+        case "next":
+          return goNext?.();
+        case "dashboard":
+          return goToDashboard();
       }
-      const key = e.key.toLowerCase();
-      if (key === "a") return goPrev?.();
-      if (key === "d") return goNext?.();
-      if (key === "escape") return goToDashboard();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);

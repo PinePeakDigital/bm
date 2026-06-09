@@ -39,9 +39,11 @@ export default function Controls({
     ? "Refresh"
     : "Add datapoint";
 
-  // These controls live inside the goal card, which is now a link. Suppress both
-  // propagation and the anchor's default navigation when interacting with a
-  // control, so e.g. hitting refresh doesn't also open the goal page.
+  // The goal card navigates via a stretched-link overlay on the slug (see
+  // goal.tsx / goal.css); these controls are a sibling of that link and sit
+  // above the overlay (z-index) so they stay independently clickable. We still
+  // stop propagation and prevent default defensively so a control interaction
+  // is never treated as activating the card link.
   const submit = (e: {
     stopPropagation: () => void;
     preventDefault: () => void;
