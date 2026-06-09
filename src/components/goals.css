@@ -12,15 +12,3 @@
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   grid-auto-rows: 1fr;
 }
-
-.detail {
-  --height: 7;
-  grid-area: 1 / 1 / var(--height) / 5;
-  overflow-y: auto;
-}
-
-@media (max-width: calc(7rem * 4)) {
-  .detail {
-    grid-area: 1 / 1 / var(--height) / -1;
-  }
-}

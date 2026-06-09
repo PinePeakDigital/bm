@@ -4,6 +4,13 @@ services:
     runtime: static
     buildCommand: npm run build
     staticPublishPath: ./dist
+    # SPA fallback: client-side routes like /goal/:slug have no file on disk, so
+    # serve index.html for any path and let the router resolve it. Without this,
+    # deep-linking or hard-refreshing a goal page would 404.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     previews:
       generation: automatic
     domains:
