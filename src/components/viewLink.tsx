@@ -18,11 +18,17 @@ export default function ViewLink({
 } & Omit<JSX.HTMLAttributes<HTMLAnchorElement>, "href">) {
   const navigate = useNavigate();
   const href = buildHref(to, params);
+  // Pull a consumer-supplied onClick out of the spread so it composes with our
+  // navigation handler instead of replacing it (a later {...rest} onClick would
+  // silently disable client-side navigation).
+  const { onClick, ...anchorProps } = rest;
 
   return (
     <a
       href={href}
       onClick={(e) => {
+        onClick?.(e);
+        if (e.defaultPrevented) return;
         if (!isPlainLeftClick(e)) return;
         e.preventDefault();
         startViewTransition(() =>
@@ -32,7 +38,7 @@ export default function ViewLink({
           navigate({ to, params } as unknown as Parameters<typeof navigate>[0])
         );
       }}
-      {...rest}
+      {...anchorProps}
     >
       {children}
     </a>

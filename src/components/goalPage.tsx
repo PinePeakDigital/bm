@@ -48,6 +48,9 @@ export default function GoalPage() {
   // Keyboard pager carried over from the old modal: a/d page, Escape leaves.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Leave modified chords (Ctrl/⌘/Alt) and already-handled events to the
+      // browser so we don't hijack its shortcuts.
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
       // Don't hijack keys while the user is typing in a field (e.g. the
       // add-datapoint input on this page) — let a/d/Escape reach the input.
       const target = e.target as HTMLElement | null;
@@ -59,9 +62,10 @@ export default function GoalPage() {
       ) {
         return;
       }
-      if (e.key === "a") return goPrev?.();
-      if (e.key === "d") return goNext?.();
-      if (e.key === "Escape") return goToDashboard();
+      const key = e.key.toLowerCase();
+      if (key === "a") return goPrev?.();
+      if (key === "d") return goNext?.();
+      if (key === "escape") return goToDashboard();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);

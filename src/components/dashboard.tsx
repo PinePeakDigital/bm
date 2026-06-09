@@ -13,10 +13,20 @@ export default function Dashboard() {
 
   if (data === undefined) return <Center>Loading...</Center>;
 
-  const r = new RegExp(filter, "i");
+  // The filter doubles as a regex for power users, but a half-typed pattern
+  // (e.g. a lone "[") makes the RegExp constructor throw, which would crash the
+  // page. Fall back to a plain substring match when the pattern is invalid.
+  let r: RegExp | null = null;
+  try {
+    r = new RegExp(filter, "i");
+  } catch {
+    r = null;
+  }
   const filtered = data.filter((g: Goal) => {
-    if (filter && !r.test(g.slug)) return false;
-    return true;
+    if (!filter) return true;
+    return r
+      ? r.test(g.slug)
+      : g.slug.toLowerCase().includes(filter.toLowerCase());
   });
 
   return (
