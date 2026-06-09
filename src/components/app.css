@@ -43,6 +43,14 @@ body {
   color: var(--text);
 }
 
+/* Links that sit on a light pastel surface — the goal cards in the grid and the
+   detail pager arrows — keep that surface's dark text colour instead of the
+   dark-frame's white link colour, which would be unreadable on the pastel. */
+.app__dark .goal__link,
+.app__dark .detail__limsumdate a {
+  color: inherit;
+}
+
 .app__content {
   flex-grow: 1;
   overflow-y: scroll;
