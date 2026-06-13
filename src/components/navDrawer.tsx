@@ -14,6 +14,7 @@ import {
 } from "lucide-preact";
 import { logout } from "../auth";
 import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
+import breakDatesUrl from "../lib/breakDatesUrl";
 import ViewLink from "./viewLink";
 import "./navDrawer.css";
 
@@ -47,15 +48,12 @@ const beeminderActions: DrawerItem[] = [
     onClick: () => {
       const start = window.prompt("Start date (YYYY-MM-DD)") || "";
       const finish = window.prompt("Finish date (YYYY-MM-DD)") || "";
-      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-      if (!datePattern.test(start) || !datePattern.test(finish)) {
+      const url = breakDatesUrl(start, finish);
+      if (!url) {
         window.alert("Invalid date format. Please use YYYY-MM-DD.");
         return;
       }
-      const url = beeminderAuthUrl(
-        `https://beeminder.com/breaks?start=${start}&finish=${finish}`
-      );
-      window.open(url, "_blank", "noopener,noreferrer");
+      window.open(beeminderAuthUrl(url), "_blank", "noopener,noreferrer");
     },
   },
   {
