@@ -11,6 +11,7 @@ import {
   LogOut,
   Newspaper,
   RefreshCw,
+  Search,
   Settings,
   TreePalm,
   X,
@@ -107,15 +108,22 @@ export default function Header({
     <div class="main-header">
       <div class="global-controls">
         <span class="filter">
+          <Search class="filter__icon" />
           <input
             type="text"
             placeholder="filter"
             value={search}
             onChange={(e) => setSearch(e.currentTarget.value)}
           />
-          <button class="icon-button" onClick={() => setSearch("")}>
-            <X />
-          </button>
+          {search && (
+            <button
+              class="icon-button filter__clear"
+              onClick={() => setSearch("")}
+              title="Clear filter"
+            >
+              <X />
+            </button>
+          )}
         </span>
 
         <span class="buttons">

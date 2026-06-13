@@ -4,7 +4,9 @@
 }
 
 .main-header input {
-    background-color: rgb(29, 29, 29);
+    background-color: transparent;
+    border: none;
+    outline: none;
     color: var(--input-text-color);
 }
 

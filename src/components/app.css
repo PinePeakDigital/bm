@@ -129,13 +129,34 @@ button {
 .filter {
   display: flex;
   align-items: center;
-  font-size: 0.6rem;
+  gap: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  background-color: rgb(29, 29, 29);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+}
+
+.filter:focus-within {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.filter__icon {
+  flex: 0 0 auto;
+  opacity: 0.5;
 }
 
 .filter input {
-  margin-right: 0.4rem;
   flex: 1 0 0;
   min-width: 0;
+}
+
+.filter .filter__clear {
+  flex: 0 0 auto;
+  opacity: 0.6;
+}
+
+.filter .filter__clear:hover {
+  opacity: 1;
 }
 
 .tags {
