@@ -5,14 +5,17 @@ import { isAuthenticated } from "../auth";
 import Login from "./login";
 import queryClient from "../queryClient";
 import Footer from "./footer";
+import NavDrawer from "./navDrawer";
 
-// The persistent app shell: the dark frame and footer that wrap every page. The
-// active page (dashboard or a single goal) renders into the <Outlet/>.
+// The persistent app shell: the dark frame, global nav drawer, and footer that
+// wrap every page. The active page (dashboard, a single goal, or the docs page)
+// renders into the <Outlet/>.
 function Layout() {
   if (!isAuthenticated()) return <Login />;
 
   return (
     <div class={`app__base app__dark`}>
+      <NavDrawer />
       <Outlet />
       <Footer />
     </div>

@@ -1,4 +1,5 @@
 import { ComponentChildren } from "preact";
+import ViewLink from "./viewLink";
 import "./footer.css";
 
 const LINKS = {
@@ -21,7 +22,8 @@ export default function Footer() {
     <small class="footer">
       Made by <Link href={LINKS.na}>Narthur</Link> and{" "}
       <Link href={LINKS.pp}>Pine Peak Digital</Link>.{" "}
-      <Link href={LINKS.bm}>View source</Link>. See also:{" "}
+      <Link href={LINKS.bm}>View source</Link>.{" "}
+      <ViewLink to="/docs">How bm works</ViewLink>. See also:{" "}
       <Link href={LINKS.tr}>TaskRatchet</Link>
     </small>
   );

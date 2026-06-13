@@ -17,6 +17,8 @@ A modern web dashboard for tracking and managing your [Beeminder](https://www.be
   - `Escape` - Return to the dashboard
 - **Real-time Updates**: Automatically refreshes when goals are queued (every 3 seconds) or periodically (every 60 seconds)
 - **Datapoint Management**: Create and delete datapoints directly from the interface
+- **Navigation Drawer**: Rarely-used actions (add goal, breaks, account settings, Beeminder links, logout) live in a slide-out drawer behind the ☰ button, available on every page
+- **In-app Docs**: A "How bm works" page documenting goal groups, keyboard navigation, and the `#bm` fineprint tags (`#bmPin`, `#bmAutodata=<url>`); reachable from the drawer and footer
 
 ## Tech Stack
 
