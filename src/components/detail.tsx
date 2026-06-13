@@ -7,6 +7,7 @@ import "./detail.css";
 import DOMPurify from "isomorphic-dompurify";
 import { marked } from "marked";
 import convertDeadlineToTime from "../services/beeminder/convertDeadlineToTime";
+import sigfigs from "../lib/sigfigs";
 import { ArrowLeft, ArrowRight } from "lucide-preact";
 import { ComponentChildren } from "preact";
 import { isPlainLeftClick } from "../lib/viewTransition";
@@ -54,14 +55,6 @@ function parseFineprint(fineprint: string): string {
   if (!fineprint) return "[empty]";
   const html = marked.parse(fineprint);
   return DOMPurify.sanitize(html);
-}
-
-function sigfigs(n: number) {
-  const digits = 2;
-  const isNegative = n < 0;
-  const abs = Math.abs(n);
-  const rounded = Math.round(abs * 10 ** digits) / 10 ** digits;
-  return isNegative ? -rounded : rounded;
 }
 
 export default function Detail({
