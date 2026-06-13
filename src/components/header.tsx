@@ -1,5 +1,5 @@
 import { useIsFetching } from "@tanstack/react-query";
-import { logout, getCredentials } from "../auth";
+import { logout } from "../auth";
 import { beeminderAuthUrl } from "../lib/beeminderAuthUrl";
 import queryClient from "../queryClient";
 import "./header.css";
@@ -35,8 +35,7 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Add goal",
     icon: <CirclePlus />,
     onClick: () => {
-      const { username, apiKey } = getCredentials();
-      window.location.href = beeminderAuthUrl(username, apiKey, "https://beeminder.com/new");
+      window.location.href = beeminderAuthUrl("https://beeminder.com/new");
     },
   },
   {
@@ -50,8 +49,9 @@ const items: (ItemLink | ItemButton)[] = [
         window.alert("Invalid date format. Please use YYYY-MM-DD.");
         return;
       }
-      const { username, apiKey } = getCredentials();
-      const url = beeminderAuthUrl(username, apiKey, `https://beeminder.com/breaks?start=${start}&finish=${finish}`);
+      const url = beeminderAuthUrl(
+        `https://beeminder.com/breaks?start=${start}&finish=${finish}`
+      );
       window.open(url, "_blank", "noopener,noreferrer");
     },
   },
@@ -59,8 +59,9 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Account settings",
     icon: <Settings />,
     onClick: () => {
-      const { username, apiKey } = getCredentials();
-      window.location.href = beeminderAuthUrl(username, apiKey, "https://beeminder.com/settings/account");
+      window.location.href = beeminderAuthUrl(
+        "https://beeminder.com/settings/account"
+      );
     },
   },
   {
@@ -77,8 +78,7 @@ const items: (ItemLink | ItemButton)[] = [
     name: "Premium",
     icon: <Gem />,
     onClick: () => {
-      const { username, apiKey } = getCredentials();
-      window.location.href = beeminderAuthUrl(username, apiKey, "https://www.beeminder.com/premium");
+      window.location.href = beeminderAuthUrl("https://www.beeminder.com/premium");
     },
   },
   {

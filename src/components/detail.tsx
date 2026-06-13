@@ -78,7 +78,9 @@ export default function Detail({
   count: number;
 }) {
   const r = sigfigs(g.mathishard[2]);
-  const { username, apiKey } = getCredentials();
+  // Only the username is needed here, to build the visible goal-page URL; the
+  // auth token stays inside beeminderAuthUrl.
+  const { username } = getCredentials();
 
   return (
     <div
@@ -106,7 +108,9 @@ export default function Detail({
             href={`https://beeminder.com/${username}/${g.slug}`}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = beeminderAuthUrl(username, apiKey, `https://beeminder.com/${username}/${g.slug}`);
+              window.location.href = beeminderAuthUrl(
+                `https://beeminder.com/${username}/${g.slug}`
+              );
             }}
             class="detail__headerText"
           >
