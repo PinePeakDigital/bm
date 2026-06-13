@@ -3,6 +3,7 @@ import { Goal } from "../services/beeminder";
 import useGoalMutations from "../useGoalMutations";
 import { getAutodata } from "../lib/directives";
 import { isProcessing } from "../lib/goalProcessing";
+import parseDatapointValue from "../lib/parseDatapointValue";
 import cnx from "../cnx";
 import { useState } from "preact/hooks";
 import "./controls.css";
@@ -12,14 +13,6 @@ function getErrorMessage(error: unknown) {
   if (typeof error === "string") return error;
   if (error instanceof Error) return error.message;
   return JSON.stringify(error);
-}
-
-function parseValue(value: string): number {
-  if (value.includes(":")) {
-    const [hours, minutes] = value.split(":").map(Number);
-    return hours + minutes / 60;
-  }
-  return Number(value);
 }
 
 export default function Controls({
@@ -52,7 +45,7 @@ export default function Controls({
   }) => {
     e.stopPropagation();
     e.preventDefault();
-    const v = parseValue(value);
+    const v = parseDatapointValue(value);
     if (Number.isFinite(v))
       addDatapoint.mutate(v, { onSuccess: () => setValue("") });
   };
