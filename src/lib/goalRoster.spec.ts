@@ -108,4 +108,16 @@ describe("goalRoster", () => {
     expect(roster.prev).toBeUndefined();
     expect(roster.next?.slug).toBe("a");
   });
+
+  it("treats an unknown current slug the same as absent: index -1, next is the first goal", () => {
+    // The goal-detail not-found page routes to a slug string that isn't in the
+    // list; it must behave like the empty-slug case rather than throwing.
+    const goals = [today("a", 1), today("b", 2)];
+    const roster = goalRoster(goals, "missing-slug");
+
+    expect(roster.index).toBe(-1);
+    expect(roster.current).toBeUndefined();
+    expect(roster.prev).toBeUndefined();
+    expect(roster.next?.slug).toBe("a");
+  });
 });
