@@ -1,0 +1,37 @@
+/* A centred, readable prose column — same width and back-link treatment as the
+   single-goal page (see goalPage.css) so the two routed pages feel of a piece. */
+.docs {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: var(--padding);
+  line-height: 1.5;
+}
+
+.docs__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: var(--padding);
+  font-size: 0.9rem;
+}
+
+.docs h1 {
+  font-size: 1.6rem;
+}
+
+.docs h2 {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.docs code,
+.docs kbd {
+  background: rgba(128, 128, 128, 0.25);
+  border-radius: 3px;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.85em;
+}
+
+.docs td code {
+  white-space: nowrap;
+}

@@ -2,6 +2,7 @@ import { Router, RootRoute, Route } from "@tanstack/react-router";
 import { App } from "./components/app";
 import Dashboard from "./components/dashboard";
 import GoalPage from "./components/goalPage";
+import DocsPage from "./components/docsPage";
 
 // The app layout (auth gate, dark shell, footer) lives at the root and renders
 // an <Outlet/> for whichever page is active.
@@ -22,7 +23,14 @@ const goalRoute = new Route({
   component: GoalPage,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, goalRoute]);
+// The in-app user guide / fineprint-tag reference.
+const docsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "docs",
+  component: DocsPage,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, goalRoute, docsRoute]);
 
 export const router = new Router({ routeTree });
 
