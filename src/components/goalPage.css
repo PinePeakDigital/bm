@@ -1,9 +1,16 @@
 /* The single-goal page: a centred, readable column rather than the modal's
-   fixed 500px box. */
+   fixed 500px box. On wide screens it grows into a two-column layout (see
+   detail.css) so the graph and data sit side by side instead of stacking. */
 .goalPage {
   max-width: 540px;
   margin: 0 auto;
   padding: var(--padding);
+}
+
+@media (min-width: 900px) {
+  .goalPage {
+    max-width: 1080px;
+  }
 }
 
 .goalPage__back {

@@ -50,6 +50,24 @@
     padding: var(--padding);
 }
 
+/* On wide screens, lay the graph + pills alongside the data + fineprint
+   instead of stacking the whole thing in a narrow column. align-items:start
+   keeps each column's content top-aligned rather than stretching to match. */
+@media (min-width: 900px) {
+    .detail_info {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: calc(var(--padding) * 2);
+        align-items: start;
+    }
+
+    /* The first heading in the data column already aligns with the top of the
+       graph, so drop its leading margin to keep the two columns level. */
+    .detail__data h2:first-child {
+        margin-top: 0;
+    }
+}
+
 .detail_info p {
     margin: var(--padding) 0;
 }

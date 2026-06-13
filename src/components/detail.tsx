@@ -126,52 +126,56 @@ export default function Detail({
       </div>
 
       <div className="detail_info">
-        <img src={g.svg_url} width={230} height={150} />
+        <div class="detail__graph">
+          <img src={g.svg_url} width={230} height={150} />
 
-        <ul class="pills">
-          <li>
-            {r} {g.gunits} / {g.runits}
-          </li>
-          <li>{g.aggday}</li>
-          <li>deadline: {convertDeadlineToTime(g.deadline)}</li>
-          {g.autoratchet && <li>autoratchet: {g.autoratchet}d</li>}
-        </ul>
+          <ul class="pills">
+            <li>
+              {r} {g.gunits} / {g.runits}
+            </li>
+            <li>{g.aggday}</li>
+            <li>deadline: {convertDeadlineToTime(g.deadline)}</li>
+            {g.autoratchet && <li>autoratchet: {g.autoratchet}d</li>}
+          </ul>
+        </div>
 
-        <h2>Recent Data</h2>
+        <div class="detail__data">
+          <h2>Recent Data</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Comment</th>
-              <th>Value</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {g.recent_data.map((point) => (
-              <DatapointRow
-                key={point.id}
-                goal={g.slug}
-                point={{
-                  id: point.id,
-                  daystamp: point.daystamp,
-                  comment: point.comment,
-                  value: point.value,
-                }}
-              />
-            ))}
-          </tbody>
-        </table>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Comment</th>
+                <th>Value</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {g.recent_data.map((point) => (
+                <DatapointRow
+                  key={point.id}
+                  goal={g.slug}
+                  point={{
+                    id: point.id,
+                    daystamp: point.daystamp,
+                    comment: point.comment,
+                    value: point.value,
+                  }}
+                />
+              ))}
+            </tbody>
+          </table>
 
-        <h2>Fineprint</h2>
+          <h2>Fineprint</h2>
 
-        <div
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: parseFineprint(g.fineprint || ""),
-          }}
-        />
+          <div
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{
+              __html: parseFineprint(g.fineprint || ""),
+            }}
+          />
+        </div>
       </div>
     </div>
   );
