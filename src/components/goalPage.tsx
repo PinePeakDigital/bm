@@ -2,7 +2,7 @@ import { useEffect } from "preact/hooks";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-preact";
 import useGoals from "../useGoals";
-import goalNavigation from "../lib/goalNavigation";
+import goalRoster from "../lib/goalRoster";
 import Detail from "./detail";
 import Center from "./center";
 import { isPlainLeftClick, startViewTransition } from "../lib/viewTransition";
@@ -20,8 +20,8 @@ export default function GoalPage() {
   const navigate = useNavigate();
   const { data } = useGoals();
 
-  const nav = goalNavigation(data ?? [], slug);
-  const { prev, next, current } = nav;
+  const roster = goalRoster(data ?? [], slug);
+  const { prev, next, current } = roster;
 
   const goTo = (target: string) => {
     startViewTransition(() =>
@@ -35,7 +35,7 @@ export default function GoalPage() {
   };
 
   // Only offer paging when we're actually on a goal — on the not-found page
-  // `current` is undefined but goalNavigation still reports a `next` (the first
+  // `current` is undefined but the roster still reports a `next` (the first
   // goal), and we don't want the pager keys jumping off the not-found page.
   const goPrev = current && prev ? () => goTo(prev.slug) : undefined;
   const goNext = current && next ? () => goTo(next.slug) : undefined;
@@ -97,8 +97,8 @@ export default function GoalPage() {
           goNext={goNext}
           prevHref={prev && goalHref(prev.slug)}
           nextHref={next && goalHref(next.slug)}
-          position={nav.index + 1}
-          count={nav.count}
+          position={roster.index + 1}
+          count={roster.count}
         />
       </div>
     </div>
