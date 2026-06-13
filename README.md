@@ -10,11 +10,11 @@ A modern web dashboard for tracking and managing your [Beeminder](https://www.be
   - **Next**: Upcoming goals
   - **Later**: Future goals
 - **Smart Filtering**: Search goals by slug/name
-- **Detail View**: Click any goal to see detailed information in a modal
-- **Keyboard Navigation**: 
+- **Detail View**: Click any goal to open a dedicated detail page with its own shareable URL; the browser Back button returns you to the dashboard
+- **Keyboard Navigation** (on a goal's detail page):
   - `a` - Navigate to previous goal
   - `d` - Navigate to next goal
-  - `Escape` - Close modal
+  - `Escape` - Return to the dashboard
 - **Real-time Updates**: Automatically refreshes when goals are queued (every 3 seconds) or periodically (every 60 seconds)
 - **Datapoint Management**: Create and delete datapoints directly from the interface
 
