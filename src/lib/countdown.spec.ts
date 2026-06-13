@@ -5,8 +5,10 @@ describe("findUnit", () => {
   it("picks the largest unit the duration exceeds", () => {
     expect(findUnit(30)).toBe("s"); // > 1s, not > 1m
     expect(findUnit(90)).toBe("m"); // > 1m, not > 1h
+    expect(findUnit(60 * 60 * 2)).toBe("h"); // just over an hour
     expect(findUnit(60 * 60 * 25)).toBe("d"); // just over a day
     expect(findUnit(60 * 60 * 24 * 8)).toBe("w"); // just over a week
+    expect(findUnit(60 * 60 * 24 * 366)).toBe("y"); // just over a year
   });
 
   it("is undefined for under a second", () => {
@@ -40,5 +42,9 @@ describe("getPrefix", () => {
   it("keeps a leading minus sign", () => {
     expect(getPrefix("-3")).toBe("-3 in");
     expect(getPrefix("-1:15")).toBe("-1:15 in");
+  });
+
+  it("degrades to a bare ' in' for an empty baremin", () => {
+    expect(getPrefix("")).toBe(" in");
   });
 });

@@ -17,6 +17,10 @@ describe("parseDatapointValue", () => {
     expect(parseDatapointValue(":30")).toBe(0.5);
   });
 
+  it("treats an empty minutes part as zero (trailing colon)", () => {
+    expect(parseDatapointValue("1:")).toBe(1);
+  });
+
   it("returns NaN for unparseable input", () => {
     expect(parseDatapointValue("abc")).toBeNaN();
   });
