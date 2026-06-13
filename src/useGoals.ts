@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { isAuthenticated, logout } from "./auth";
 import { getGoals, Goal, BeeminderApiError } from "./services/beeminder";
+import { isProcessing } from "./lib/goalProcessing";
 
 // The single source of truth for the goals query key. Anything that reads or
 // mutates the cached goals list keys off this.
@@ -20,7 +21,7 @@ export function handleGoalsError(err: Error) {
 export default function useGoals() {
   return useQuery<Goal[], Error>(GOALS_QUERY_KEY, () => getGoals(), {
     enabled: isAuthenticated(),
-    refetchInterval: (d) => (d?.find((g) => g.queued) ? 3000 : 60000),
+    refetchInterval: (d) => (d?.some(isProcessing) ? 3000 : 60000),
     refetchIntervalInBackground: false,
     retry: false,
     onError: handleGoalsError,

@@ -4,6 +4,7 @@ import {
 } from "@tanstack/react-query";
 import queryClient from "./queryClient";
 import { GOALS_QUERY_KEY } from "./useGoals";
+import { markProcessing } from "./lib/goalProcessing";
 import {
   createDatapoint,
   deleteDatapoint,
@@ -14,7 +15,7 @@ import {
 type Context = { previous?: Goal[] };
 
 // Every goal mutation behaves the same way around the goals cache:
-//   1. optimistically mark the goal as `queued` so the UI shows it working,
+//   1. optimistically mark the goal as processing so the UI shows it working,
 //   2. roll that back if the mutation fails, and
 //   3. invalidate the goals query once it settles so we refetch the truth.
 //
@@ -28,7 +29,7 @@ export function goalMutationOptions<TVariables>(
       await queryClient.cancelQueries(GOALS_QUERY_KEY);
       const previous = queryClient.getQueryData<Goal[]>(GOALS_QUERY_KEY);
       queryClient.setQueryData<Goal[]>(GOALS_QUERY_KEY, (goals) =>
-        goals?.map((g) => (g.slug === slug ? { ...g, queued: true } : g))
+        goals?.map((g) => (g.slug === slug ? markProcessing(g) : g))
       );
       return { previous };
     },
