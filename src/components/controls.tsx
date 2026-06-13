@@ -2,6 +2,7 @@ import "./goal.css";
 import { Goal } from "../services/beeminder";
 import useGoalMutations from "../useGoalMutations";
 import { getAutodata } from "../lib/directives";
+import { isProcessing } from "../lib/goalProcessing";
 import cnx from "../cnx";
 import { useState } from "preact/hooks";
 import "./controls.css";
@@ -31,7 +32,8 @@ export default function Controls({
   const [value, setValue] = useState<string>("");
   const { addDatapoint, refresh: refreshGoal } = useGoalMutations(g.slug);
   const autodata = getAutodata(g);
-  const isLoading = addDatapoint.isLoading || refreshGoal.isLoading || g.queued;
+  const isLoading =
+    addDatapoint.isLoading || refreshGoal.isLoading || isProcessing(g);
   const isError = addDatapoint.isError || refreshGoal.isError;
   const tooltip = isError
     ? getErrorMessage(addDatapoint.error || refreshGoal.error)
