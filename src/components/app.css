@@ -136,8 +136,12 @@ button {
   border-radius: 5px;
 }
 
+/* The input drops its own outline (header.css) so the whole field reads as one
+   control; the field itself takes over the focus indicator with a brighter
+   border and a soft ring, keeping focus clearly visible on the dark frame. */
 .filter:focus-within {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 }
 
 .filter__icon {
