@@ -14,7 +14,7 @@ function today(slug: string, losedate: number): Goal {
 
 describe("goalRoster", () => {
   it("returns an empty roster for no goals", () => {
-    const roster = goalRoster([], undefined);
+    const roster = goalRoster([]);
     expect(roster.ordered).toEqual([]);
     expect(roster.count).toBe(0);
     expect(roster.index).toBe(-1);
@@ -76,7 +76,7 @@ describe("goalRoster", () => {
 
   it("reports index, count and neighbours for a middle goal", () => {
     const goals = [today("a", 1), today("b", 2), today("c", 3)];
-    const roster = goalRoster(goals, "b");
+    const roster = goalRoster(goals, { currentSlug: "b" });
 
     expect(roster.index).toBe(1);
     expect(roster.count).toBe(3);
@@ -88,11 +88,11 @@ describe("goalRoster", () => {
   it("has no prev at the start and no next at the end", () => {
     const goals = [today("a", 1), today("b", 2), today("c", 3)];
 
-    const first = goalRoster(goals, "a");
+    const first = goalRoster(goals, { currentSlug: "a" });
     expect(first.prev).toBeUndefined();
     expect(first.next?.slug).toBe("b");
 
-    const last = goalRoster(goals, "c");
+    const last = goalRoster(goals, { currentSlug: "c" });
     expect(last.next).toBeUndefined();
     expect(last.prev?.slug).toBe("b");
   });
@@ -101,7 +101,7 @@ describe("goalRoster", () => {
     // Preserves the prior grid behaviour where, with nothing open, advancing
     // ("next") jumps to the first goal.
     const goals = [today("a", 1), today("b", 2)];
-    const roster = goalRoster(goals, undefined);
+    const roster = goalRoster(goals);
 
     expect(roster.index).toBe(-1);
     expect(roster.current).toBeUndefined();
@@ -113,11 +113,73 @@ describe("goalRoster", () => {
     // The goal-detail not-found page routes to a slug string that isn't in the
     // list; it must behave like the empty-slug case rather than throwing.
     const goals = [today("a", 1), today("b", 2)];
-    const roster = goalRoster(goals, "missing-slug");
+    const roster = goalRoster(goals, { currentSlug: "missing-slug" });
 
     expect(roster.index).toBe(-1);
     expect(roster.current).toBeUndefined();
     expect(roster.prev).toBeUndefined();
     expect(roster.next?.slug).toBe("a");
+  });
+
+  describe("filtering pipeline", () => {
+    it("returns every goal when no filter is given (the pager's view)", () => {
+      const goals = [today("alpha", 1), today("beta", 2), today("gamma", 3)];
+      expect(goalRoster(goals).ordered.map((g) => g.slug)).toEqual([
+        "alpha",
+        "beta",
+        "gamma",
+      ]);
+    });
+
+    it("narrows the roster to goals matching the filter before grouping", () => {
+      const goals = [today("run-am", 1), today("run-pm", 2), today("sleep", 3)];
+      const roster = goalRoster(goals, { filter: "run" });
+
+      // "run" matches both run-* goals (regex, case-insensitive); count
+      // reflects the filtered set, not the full list.
+      expect(roster.ordered.map((g) => g.slug)).toEqual(["run-am", "run-pm"]);
+      expect(roster.count).toBe(2);
+    });
+
+    it("groups and orders the filtered set, not the raw input", () => {
+      // Filtering happens first, so a filtered-out "today" goal can't sneak into
+      // the today row or shift the flattened order.
+      const goals = [
+        goal({ slug: "keep-pinned", fineprint: "#bmPin", safebuf: 3, losedate: 4 }),
+        goal({ slug: "drop-today", safebuf: 0, losedate: 1 }),
+        goal({ slug: "keep-later", safebuf: 10, todayta: true, losedate: 5 }),
+      ];
+      const roster = goalRoster(goals, { filter: "keep" });
+
+      expect(roster.ordered.map((g) => g.slug)).toEqual([
+        "keep-pinned",
+        "keep-later",
+      ]);
+      expect(roster.rows.map((r) => r.goals.map((g) => g.slug))).toEqual([
+        ["keep-pinned"],
+        [],
+        ["keep-later"],
+      ]);
+    });
+
+    it("locates the current goal within the filtered set", () => {
+      const goals = [today("run-am", 1), today("run-pm", 2), today("sleep", 3)];
+      // sleep is filtered out, so paging is relative to [run-am, run-pm].
+      const roster = goalRoster(goals, { filter: "run", currentSlug: "run-am" });
+
+      expect(roster.index).toBe(0);
+      expect(roster.count).toBe(2);
+      expect(roster.next?.slug).toBe("run-pm");
+    });
+
+    it("falls back to a literal match for an invalid regex filter", () => {
+      // A lone "(" would throw from new RegExp; filterGoals degrades to a
+      // case-insensitive substring match rather than crashing the roster.
+      const goals = [goal({ slug: "a(b", safebuf: 0, losedate: 1 })];
+      expect(() => goalRoster(goals, { filter: "a(" })).not.toThrow();
+      expect(goalRoster(goals, { filter: "a(" }).ordered.map((g) => g.slug)).toEqual([
+        "a(b",
+      ]);
+    });
   });
 });

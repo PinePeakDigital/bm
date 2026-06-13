@@ -20,7 +20,7 @@ export default function GoalPage() {
   const navigate = useNavigate();
   const { data } = useGoals();
 
-  const roster = goalRoster(data ?? [], slug);
+  const roster = goalRoster(data ?? [], { currentSlug: slug });
   const { prev, next, current } = roster;
 
   const goTo = (target: string) => {
