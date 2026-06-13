@@ -10,11 +10,11 @@ import "./docsPage.css";
 export default function DocsPage() {
   return (
     <div class="app__content">
-      <div class="docs">
-        <ViewLink to="/" class="docs__back icon-button">
-          <ArrowLeft /> <span>Dashboard</span>
-        </ViewLink>
+      <ViewLink to="/" class="docs__back icon-button">
+        <ArrowLeft /> <span>Dashboard</span>
+      </ViewLink>
 
+      <div class="docs">
         <h1>How bm works</h1>
         <p>
           <strong>bm</strong> is a focused dashboard for your{" "}
@@ -31,15 +31,17 @@ export default function DocsPage() {
         </p>
         <ul>
           <li>
-            <strong>Pinned</strong> — goals you always want on top: Beeminder
-            "drinker" goals, or any goal tagged <code>#bmPin</code> (see below).
+            <strong>Pinned</strong> — goals you always want on top. Do Less goals
+            (Beeminder's "drinker" type) are pinned automatically; any other goal
+            joins them when you tag it <code>#bmPin</code> (see below). This group
+            is about goal type and your tags, not buffer.
           </li>
           <li>
             <strong>Today</strong> — goals due today (no safety buffer left).
           </li>
           <li>
             <strong>Next</strong> — goals you haven't entered data for today that
-            run out of buffer within a week.
+            have less than one week of buffer.
           </li>
           <li>
             <strong>Later</strong> — everything else, with comfortable buffer.
@@ -82,8 +84,9 @@ export default function DocsPage() {
                 <code>#bmPin</code>
               </td>
               <td>
-                Pins the goal to the <strong>Pinned</strong> group, regardless of
-                how much buffer it has.
+                Pins the goal to the <strong>Pinned</strong> group, the same
+                group Do Less goals land in automatically, so it sorts to the top
+                regardless of its deadline.
               </td>
             </tr>
             <tr>
@@ -91,16 +94,17 @@ export default function DocsPage() {
                 <code>#bmAutodata=&lt;url&gt;</code>
               </td>
               <td>
-                Marks the goal as autodata and gives bm a custom URL to open when
-                you refresh its data — e.g.{" "}
-                <code>#bmAutodata=https://example.com/refresh</code>.
+                Marks the goal as autodata and gives bm a custom URL to request
+                when you refresh the goal — bm sends a fetch to that URL (to kick
+                off your own data sync) instead of refreshing Beeminder's native
+                graph. E.g. <code>#bmAutodata=https://example.com/refresh</code>.
               </td>
             </tr>
           </tbody>
         </table>
         <p>
-          Beeminder "drinker" goals are treated as pinned automatically, so you
-          don't need <code>#bmPin</code> on them.
+          Do Less goals (Beeminder's "drinker" type) are pinned automatically, so
+          you don't need <code>#bmPin</code> on them.
         </p>
 
         <h2>Data &amp; refresh</h2>
