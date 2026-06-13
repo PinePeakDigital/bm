@@ -7,11 +7,15 @@ import "./goals.css";
 
 // The goal grid. Each card is a real link to that goal's page; opening,
 // paging, and closing a goal are all plain navigation now (see goalPage.tsx),
-// so there's no modal or selection state to track here. The rows and their
-// order come from goalRoster — the single source of goal display order, shared
-// with the detail pager so the grid and "prev/next" can't drift.
-export function Goals({ goals }: { goals: Goal[] }) {
-  const { rows } = useMemo(() => goalRoster(goals), [goals]);
+// so there's no modal or selection state to track here. The rows, their order,
+// and the search filtering all come from goalRoster — the single source of goal
+// display order, shared with the detail pager so the grid and "prev/next" can't
+// drift.
+export function Goals({ goals, filter }: { goals: Goal[]; filter?: string }) {
+  const { rows } = useMemo(
+    () => goalRoster(goals, { filter }),
+    [goals, filter]
+  );
 
   return (
     <div class="goals">

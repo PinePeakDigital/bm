@@ -1,4 +1,5 @@
 import { Goal } from "../services/beeminder";
+import filterGoals from "./filterGoals";
 import groupGoals from "./groupGoals";
 
 export type GoalGroup = "pinned" | "today" | "next" | "later";
@@ -33,14 +34,27 @@ export type GoalRoster = {
   next?: Goal;
 };
 
-// The single definition of how the dashboard lays out and orders goals, and how
-// you move between them. Both the goal grid and the detail pager go through
-// this, so the rendered order and "prev/next"/"X of N" share one ordered list.
+export type GoalRosterOptions = {
+  // Narrow the roster to goals matching the dashboard search box. Omitted or
+  // empty means no filtering — the detail pager walks the full, unfiltered list.
+  filter?: string;
+  // Slug of the goal currently open in the detail pager, if any.
+  currentSlug?: string;
+};
+
+// The single definition of how the dashboard turns the raw goal list into what
+// you see and how you move through it: filter (search box) → classify → group →
+// order → locate the current goal's neighbours. Both the goal grid and the
+// detail pager go through this, so the rendered order, the filtered set, and
+// "prev/next"/"X of N" all share one pipeline and can't drift apart.
 export default function goalRoster(
   goals: Goal[],
-  currentSlug?: string
+  { filter, currentSlug }: GoalRosterOptions = {}
 ): GoalRoster {
-  const grouped = groupGoals(goals);
+  // filterGoals returns the input untouched for an empty filter, so the pager
+  // (which passes no filter) walks every goal.
+  const matched = filterGoals(goals, filter ?? "");
+  const grouped = groupGoals(matched);
   const rows: GoalRow[] = ROWS.map((groups) => ({
     groups,
     goals: groups.flatMap((name) => grouped[name]),
