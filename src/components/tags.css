@@ -1,8 +1,0 @@
-.tags button {
-    border: none;
-    background-color: white;
-}
-
-.tags__active button {
-    font-weight: bold;
-}
