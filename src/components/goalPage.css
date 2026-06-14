@@ -1,16 +1,11 @@
-/* The single-goal page: a centred, readable column rather than the modal's
-   fixed 500px box. On wide screens it grows into a two-column layout (see
+/* The single-goal page mirrors the grid: the goal sits on a full-bleed,
+   square-cornered surface that runs edge to edge, rather than the modal's
+   fixed 500px box. The top "back" control keeps a small side gutter like the
+   dashboard header, and extra top room separates it from the nav drawer's
+   fixed trigger. On wide screens the body splits into two columns (see
    detail.css) so the graph and data sit side by side instead of stacking. */
 .goalPage {
-  max-width: 540px;
-  margin: 0 auto;
-  padding: var(--padding);
-}
-
-@media (min-width: 900px) {
-  .goalPage {
-    max-width: 1080px;
-  }
+  padding-top: 1rem;
 }
 
 .goalPage__back {
@@ -18,11 +13,10 @@
   align-items: center;
   gap: 0.25rem;
   margin-bottom: var(--padding);
+  padding: 0 var(--padding);
   font-size: 0.9rem;
 }
 
 .goalPage .detail {
   background-color: var(--bg);
-  border-radius: 5px;
-  overflow: hidden;
 }
