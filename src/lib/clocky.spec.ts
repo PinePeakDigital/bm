@@ -15,6 +15,11 @@ describe("formatClocky", () => {
   it("rounds to the nearest minute", () => {
     expect(formatClocky(0.119)).toBe("0:07");
   });
+
+  it("does not emit a signed zero for tiny negatives", () => {
+    expect(formatClocky(-0.001)).toBe("0:00");
+    expect(formatClocky(0)).toBe("0:00");
+  });
 });
 
 describe("clockifyLimsum", () => {
@@ -30,5 +35,13 @@ describe("clockifyLimsum", () => {
 
   it("handles an unsigned leading value", () => {
     expect(clockifyLimsum("1.5 due Sat")).toBe("1:30 due Sat");
+  });
+
+  it("handles an integer leading value", () => {
+    expect(clockifyLimsum("+5 due Sat")).toBe("+5:00 due Sat");
+  });
+
+  it("leaves strings with no leading value untouched", () => {
+    expect(clockifyLimsum("due Sat")).toBe("due Sat");
   });
 });
