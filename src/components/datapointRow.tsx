@@ -2,12 +2,15 @@ import useGoalMutations from "../useGoalMutations";
 import cnx from "../cnx";
 import "./datapointRow.css";
 import { Copy, Trash } from "lucide-preact";
+import { formatClocky } from "../lib/clocky";
 
 export default function DatapointRow({
   goal,
+  hhmmformat,
   point,
 }: {
   goal: string;
+  hhmmformat?: boolean;
   point: {
     id: string;
     daystamp: string;
@@ -21,7 +24,7 @@ export default function DatapointRow({
     <tr key={point.id} data-id={point.id} class="datapoint-row">
       <td>{point.daystamp}</td>
       <td>{point.comment}</td>
-      <td>{point.value}</td>
+      <td>{hhmmformat ? formatClocky(point.value) : point.value}</td>
       <td>
         <button
           type="button"
