@@ -8,6 +8,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { marked } from "marked";
 import convertDeadlineToTime from "../services/beeminder/convertDeadlineToTime";
 import sigfigs from "../lib/sigfigs";
+import { clockifyLimsum } from "../lib/clocky";
 import { ArrowLeft, ArrowRight } from "lucide-preact";
 import { ComponentChildren } from "preact";
 import { isPlainLeftClick } from "../lib/viewTransition";
@@ -93,7 +94,7 @@ export default function Detail({
         <PagerArrow href={prevHref} onActivate={goPrev} label="Previous goal">
           <ArrowLeft />
         </PagerArrow>
-        <span>{g.limsumdate}</span>
+        <span>{g.hhmmformat ? clockifyLimsum(g.limsumdate) : g.limsumdate}</span>
         <span>
           {position} of {count}
         </span>
@@ -153,6 +154,7 @@ export default function Detail({
                 <DatapointRow
                   key={point.id}
                   goal={g.slug}
+                  hhmmformat={g.hhmmformat}
                   point={{
                     id: point.id,
                     daystamp: point.daystamp,
