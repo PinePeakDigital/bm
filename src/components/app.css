@@ -51,7 +51,12 @@ body {
   color: inherit;
 }
 
-.app__content {
+/* The one scroll region: the page (via the <Outlet/>) and the nav drawer's
+   hamburger trigger live in here and scroll together, so the trigger rides up
+   with the page instead of staying pinned. The footer sits outside, below it.
+   position: relative anchors the trigger's absolute positioning. */
+.app__scroll {
+  position: relative;
   flex-grow: 1;
   overflow-y: scroll;
 }
