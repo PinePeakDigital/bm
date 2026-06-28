@@ -3,8 +3,8 @@
     --input-text-color: white;
 }
 
-/* Leave room on the right for the NavDrawer's fixed hamburger trigger so the
-   refresh button doesn't sit underneath it. */
+/* Leave room on the right for the NavDrawer's hamburger trigger so the refresh
+   button doesn't sit underneath it. */
 .main-header .global-controls {
     padding-right: 2.25rem;
 }

@@ -1,8 +1,9 @@
-/* The hamburger trigger is pinned to the top-right corner of the viewport so it
-   sits in the same place on every page (dashboard, goal, docs), floating just to
-   the right of the dashboard's filter + refresh row. */
+/* The hamburger trigger sits at the top-right of the scroll region (.app__scroll)
+   rather than the viewport, so it scrolls up with the page content instead of
+   staying fixed in the corner. At rest it floats just right of the dashboard's
+   filter + refresh row. */
 .navDrawer__trigger {
-  position: fixed;
+  position: absolute;
   top: var(--padding);
   right: var(--padding);
   z-index: 20;

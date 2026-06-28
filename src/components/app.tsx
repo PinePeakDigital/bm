@@ -15,8 +15,10 @@ function Layout() {
 
   return (
     <div class={`app__base app__dark`}>
-      <NavDrawer />
-      <Outlet />
+      <div class="app__scroll">
+        <NavDrawer />
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );
