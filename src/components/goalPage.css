@@ -2,7 +2,7 @@
    square-cornered surface that runs edge to edge, rather than the modal's
    fixed 500px box. The top "back" control keeps a small side gutter like the
    dashboard header, and extra top room separates it from the nav drawer's
-   fixed trigger. On wide screens the body splits into two columns (see
+   trigger. On wide screens the body splits into two columns (see
    detail.css) so the graph and data sit side by side instead of stacking. */
 .goalPage {
   padding-top: 1rem;
