@@ -83,6 +83,14 @@ export default function Detail({
   // auth token stays inside beeminderAuthUrl.
   const { username } = getCredentials();
 
+  // The beeminder.com goal page. The visible href is token-free; every actual
+  // navigation goes through beeminderAuthUrl so the deep-link stays authed —
+  // including new-tab opens from modifier-clicks (click) and middle-clicks
+  // (auxclick), which the browser would otherwise send to the raw href.
+  const goalUrl = `https://beeminder.com/${username}/${g.slug}`;
+  const openGoalInNewTab = () =>
+    window.open(beeminderAuthUrl(goalUrl), "_blank", "noopener,noreferrer");
+
   return (
     <div
       class="detail"
@@ -106,17 +114,22 @@ export default function Detail({
       <div class="detail__header">
         <div>
           <a
-            href={`https://beeminder.com/${username}/${g.slug}`}
+            href={goalUrl}
             onClick={(e) => {
               e.preventDefault();
-              const url = beeminderAuthUrl(
-                `https://beeminder.com/${username}/${g.slug}`
-              );
               if (isPlainLeftClick(e)) {
-                window.location.href = url;
+                window.location.href = beeminderAuthUrl(goalUrl);
               } else {
-                window.open(url, "_blank", "noopener,noreferrer");
+                openGoalInNewTab();
               }
+            }}
+            // click doesn't fire for the middle button; auxclick does. Intercept
+            // button 1 so middle-click also opens the authed URL (leave other
+            // buttons, e.g. right-click for the context menu, to the browser).
+            onAuxClick={(e) => {
+              if (e.button !== 1) return;
+              e.preventDefault();
+              openGoalInNewTab();
             }}
             class="detail__headerText"
           >
