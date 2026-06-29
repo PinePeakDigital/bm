@@ -109,9 +109,14 @@ export default function Detail({
             href={`https://beeminder.com/${username}/${g.slug}`}
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = beeminderAuthUrl(
+              const url = beeminderAuthUrl(
                 `https://beeminder.com/${username}/${g.slug}`
               );
+              if (isPlainLeftClick(e)) {
+                window.location.href = url;
+              } else {
+                window.open(url, "_blank", "noopener,noreferrer");
+              }
             }}
             class="detail__headerText"
           >
