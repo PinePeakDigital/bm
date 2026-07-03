@@ -41,6 +41,11 @@ describe("clockifyLimsum", () => {
     expect(clockifyLimsum("+5 due Sat")).toBe("+5:00 due Sat");
   });
 
+  it("rounds the amount due up to the next minute", () => {
+    // 00:05:01 required (0.083611 h) must not read as 0:05
+    expect(clockifyLimsum("+0.083611 due Sat")).toBe("+0:06 due Sat");
+  });
+
   it("leaves strings with no leading value untouched", () => {
     expect(clockifyLimsum("due Sat")).toBe("due Sat");
   });
