@@ -46,6 +46,10 @@ describe("clockifyLimsum", () => {
     expect(clockifyLimsum("+0.083611 due Sat")).toBe("+0:06 due Sat");
   });
 
+  it("rounds up by magnitude for negative fractional values", () => {
+    expect(clockifyLimsum("-0.083611 due Sat")).toBe("-0:06 due Sat");
+  });
+
   it("leaves strings with no leading value untouched", () => {
     expect(clockifyLimsum("due Sat")).toBe("due Sat");
   });
