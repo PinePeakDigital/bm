@@ -33,5 +33,8 @@ export function formatClockyClock(clock: string): string {
 // untouched.
 export function clockifyLimsum(limsum: string, baremin: string): string {
   const amount = formatClockyClock(baremin).replace(/^[+-]/, "");
-  return limsum.replace(/^([+-]?)\d+(\.\d+)?/, (_m, sign) => `${sign}${amount}`);
+  return limsum.replace(
+    /^([+-]?)\d+(\.\d+)?/,
+    (_m, sign: string) => `${sign}${amount}`
+  );
 }

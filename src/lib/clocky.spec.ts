@@ -39,6 +39,11 @@ describe("formatClockyClock", () => {
     expect(formatClockyClock("-00:06:00")).toBe("-0:06");
   });
 
+  it("never emits a signed zero", () => {
+    expect(formatClockyClock("-00:00:00")).toBe("0:00");
+    expect(formatClockyClock("+00:00:00")).toBe("0:00");
+  });
+
   it("returns an empty string when there's no clock value", () => {
     expect(formatClockyClock("")).toBe("");
     expect(formatClockyClock("1.5")).toBe("");
