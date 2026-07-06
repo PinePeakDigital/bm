@@ -1,5 +1,5 @@
 import { Goal } from "../services/beeminder";
-import { formatClocky } from "./clocky";
+import { formatClockyClock } from "./clocky";
 
 // The math behind the goal countdown: how long until a goal derails, which time
 // unit to show that in, and the rate prefix parsed from Beeminder's `baremin`.
@@ -28,17 +28,16 @@ export function secondsUntil(losedate: number, now: Date = new Date()): number {
 }
 
 // The rate prefix shown before the countdown. For clocky (hhmmformat) goals we
-// format the raw decimal amount from `limsum` ourselves, rounding partial
-// minutes up so the grid never reads less than the goal detail page — which
-// clockifies the same decimal — and stays pessimistic. Beeminder's own
-// `baremin` rounds to the nearest minute (0.0912h → "0:05", not "0:06"), so we
-// don't trust it for clocky goals. For other goals we show `baremin` directly.
+// reformat Beeminder's `baremin` — a second-precise "HH:MM:SS" amount due — to
+// "H:MM", rounding partial minutes up so we stay pessimistic. We can't use
+// limsum's leading number here: it's unreliable for clocky goals (Beeminder may
+// print "+1" for a six-minute amount). For other goals we show `baremin`
+// directly.
 export function getPrefix(
-  g: Pick<Goal, "baremin" | "limsum" | "hhmmformat">
+  g: Pick<Goal, "baremin" | "hhmmformat">
 ): string {
   if (g.hhmmformat) {
-    const amount = g.limsum.match(/^[+-]?\d+(\.\d+)?/)?.[0];
-    return `${amount ? formatClocky(Number(amount), true) : ""} in`;
+    return `${formatClockyClock(g.baremin)} in`;
   }
   const sign = g.baremin.includes("-") ? "-" : "";
   const number = g.baremin.match(/(\d+\.?\d?\d?)/)?.[1] || "";

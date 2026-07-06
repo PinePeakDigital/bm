@@ -102,7 +102,9 @@ export default function Detail({
         <PagerArrow href={prevHref} onActivate={goPrev} label="Previous goal">
           <ArrowLeft />
         </PagerArrow>
-        <span>{g.hhmmformat ? clockifyLimsum(g.limsumdate) : g.limsumdate}</span>
+        <span>
+          {g.hhmmformat ? clockifyLimsum(g.limsumdate, g.baremin) : g.limsumdate}
+        </span>
         <span>
           {position} of {count}
         </span>
