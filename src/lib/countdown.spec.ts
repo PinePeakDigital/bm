@@ -58,6 +58,11 @@ describe("getPrefix", () => {
     ).toBe("-1:15 in");
   });
 
+  it("formats an exact-minute clocky amount without a ceil bump", () => {
+    expect(getPrefix(goal({ limsum: "1 in 0 days", hhmmformat: true }))).toBe("1:00 in");
+    expect(getPrefix(goal({ limsum: "0.5 in 0 days", hhmmformat: true }))).toBe("0:30 in");
+  });
+
   it("degrades to a bare ' in' when there's no amount", () => {
     expect(getPrefix(goal({}))).toBe(" in");
     expect(getPrefix(goal({ hhmmformat: true }))).toBe(" in");
