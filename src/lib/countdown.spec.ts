@@ -30,8 +30,8 @@ describe("secondsUntil", () => {
 });
 
 describe("getPrefix", () => {
-  const goal = (o: { baremin?: string; limsum?: string; hhmmformat?: boolean }) =>
-    ({ baremin: "", limsum: "", hhmmformat: false, ...o }) as Parameters<
+  const goal = (o: { baremin?: string; hhmmformat?: boolean }) =>
+    ({ baremin: "", hhmmformat: false, ...o }) as Parameters<
       typeof getPrefix
     >[0];
 
@@ -44,23 +44,22 @@ describe("getPrefix", () => {
     expect(getPrefix(goal({ baremin: "-3" }))).toBe("-3 in");
   });
 
-  it("rounds a clocky goal's amount up to the next minute", () => {
-    // 0.0912h = 5.47min → ceils to 0:06, matching the goal detail page rather
-    // than Beeminder's nearest-minute baremin of "0:05".
+  it("reformats a clocky goal's baremin, rounding partial minutes up", () => {
+    // baremin is second-precise; 00:05:28 must not read as 0:05.
     expect(
-      getPrefix(goal({ baremin: "0:05", limsum: "0.0912 in 0 days", hhmmformat: true }))
+      getPrefix(goal({ baremin: "+00:05:28", hhmmformat: true }))
     ).toBe("0:06 in");
   });
 
   it("keeps a clocky minus sign", () => {
     expect(
-      getPrefix(goal({ limsum: "-1.25 in 2 days", hhmmformat: true }))
+      getPrefix(goal({ baremin: "-01:15:00", hhmmformat: true }))
     ).toBe("-1:15 in");
   });
 
   it("formats an exact-minute clocky amount without a ceil bump", () => {
-    expect(getPrefix(goal({ limsum: "1 in 0 days", hhmmformat: true }))).toBe("1:00 in");
-    expect(getPrefix(goal({ limsum: "0.5 in 0 days", hhmmformat: true }))).toBe("0:30 in");
+    expect(getPrefix(goal({ baremin: "+01:00:00", hhmmformat: true }))).toBe("1:00 in");
+    expect(getPrefix(goal({ baremin: "+00:30:00", hhmmformat: true }))).toBe("0:30 in");
   });
 
   it("degrades to a bare ' in' when there's no amount", () => {
