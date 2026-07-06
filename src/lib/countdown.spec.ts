@@ -30,21 +30,36 @@ describe("secondsUntil", () => {
 });
 
 describe("getPrefix", () => {
-  it("formats a bare number", () => {
-    expect(getPrefix("1")).toBe("1 in");
-    expect(getPrefix("1.5")).toBe("1.5 in");
-  });
+  const goal = (o: { baremin?: string; limsum?: string; hhmmformat?: boolean }) =>
+    ({ baremin: "", limsum: "", hhmmformat: false, ...o }) as Parameters<
+      typeof getPrefix
+    >[0];
 
-  it("prefers an h:mm time over a number", () => {
-    expect(getPrefix("2:30")).toBe("2:30 in");
+  it("formats a bare number for non-clocky goals", () => {
+    expect(getPrefix(goal({ baremin: "1" }))).toBe("1 in");
+    expect(getPrefix(goal({ baremin: "1.5" }))).toBe("1.5 in");
   });
 
   it("keeps a leading minus sign", () => {
-    expect(getPrefix("-3")).toBe("-3 in");
-    expect(getPrefix("-1:15")).toBe("-1:15 in");
+    expect(getPrefix(goal({ baremin: "-3" }))).toBe("-3 in");
   });
 
-  it("degrades to a bare ' in' for an empty baremin", () => {
-    expect(getPrefix("")).toBe(" in");
+  it("rounds a clocky goal's amount up to the next minute", () => {
+    // 0.0912h = 5.47min → ceils to 0:06, matching the goal detail page rather
+    // than Beeminder's nearest-minute baremin of "0:05".
+    expect(
+      getPrefix(goal({ baremin: "0:05", limsum: "0.0912 in 0 days", hhmmformat: true }))
+    ).toBe("0:06 in");
+  });
+
+  it("keeps a clocky minus sign", () => {
+    expect(
+      getPrefix(goal({ limsum: "-1.25 in 2 days", hhmmformat: true }))
+    ).toBe("-1:15 in");
+  });
+
+  it("degrades to a bare ' in' when there's no amount", () => {
+    expect(getPrefix(goal({}))).toBe(" in");
+    expect(getPrefix(goal({ hhmmformat: true }))).toBe(" in");
   });
 });

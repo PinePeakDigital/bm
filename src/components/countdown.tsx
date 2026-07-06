@@ -65,7 +65,7 @@ export default function Countdown({ g }: { g: Goal }) {
 
   return (
     <W>
-      {getPrefix(g.baremin)} {Math.floor(+seconds / Unit[u])}
+      {getPrefix(g)} {Math.floor(+seconds / Unit[u])}
       {u}
     </W>
   );
